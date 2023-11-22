@@ -2,8 +2,11 @@ import io
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-import os
-import shutil
+
+# import os
+# import shutil
+
+import soundfile as sf
 import streamlit as st
 import tempfile
 
@@ -84,20 +87,15 @@ with col_left:
     )
     if file_music_1 is not None:
         st.audio(file_music_1)
-        temp_dir = tempfile.mkdtemp()
-        # st.write(temp_dir)
-        pathing = os.path.join(temp_dir, file_music_1.name)
-        with open(pathing, "wb") as f:
-            f.write(file_music_1.getvalue())
 
         # Waveplot
         fig, ax = plt.subplots(nrows=3, sharex=True)
-        y_1, sr_1 = librosa.load(pathing)
+        y_1, sr_1 = librosa.load(io.BytesIO(file_music_1.getvalue()))
         librosa.display.waveshow(y_1, sr=sr_1, ax=ax[0])
         ax[0].set_title("Envelope view, mono")
         ax[0].label_outer()
 
-        y_1s, sr_1s = librosa.load(pathing, mono=False)
+        y_1s, sr_1s = librosa.load(io.BytesIO(file_music_1.getvalue()), mono=False)
         librosa.display.waveshow(y_1s, sr=sr_1s, ax=ax[1])
         ax[1].set_title("Envelope view, Stereo")
         ax[1].label_outer()
@@ -125,7 +123,6 @@ with col_left:
         )
         ax_spec.set(title="Linear-frequency power spectrogram")
         st.pyplot(fig_spec)
-        shutil.rmtree(temp_dir)
 
 
 with col_right:
@@ -137,20 +134,15 @@ with col_right:
     )
     if file_music_2 is not None:
         st.audio(file_music_2)
-        temp_dir = tempfile.mkdtemp()
-        # st.write(temp_dir)
-        pathing = os.path.join(temp_dir, file_music_2.name)
-        with open(pathing, "wb") as f:
-            f.write(file_music_2.getvalue())
 
         # Waveplot
         fig_2, ax_2 = plt.subplots(nrows=3, sharex=True)
-        y_2, sr_2 = librosa.load(pathing)
+        y_2, sr_2 = librosa.load(io.BytesIO(file_music_2.getvalue()))
         librosa.display.waveshow(y_2, sr=sr_2, ax=ax_2[0])
         ax_2[0].set_title("Envelope view, mono")
         ax_2[0].label_outer()
 
-        y_2s, sr_2s = librosa.load(pathing, mono=False)
+        y_2s, sr_2s = librosa.load(io.BytesIO(file_music_2.getvalue()), mono=False)
         librosa.display.waveshow(y_2s, sr=sr_2s, ax=ax_2[1])
         ax_2[1].set_title("Envelope view, Stereo")
         ax_2[1].label_outer()
@@ -178,4 +170,3 @@ with col_right:
         )
         ax_spec_2.set(title="Linear-frequency power spectrogram")
         st.pyplot(fig_spec_2)
-        shutil.rmtree(temp_dir)
