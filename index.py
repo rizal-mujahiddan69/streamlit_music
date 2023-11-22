@@ -176,6 +176,6 @@ with col_right:
         img = librosa.display.specshow(
             D_f_2, y_axis="linear", x_axis="time", sr=sr_2, ax=ax_spec_2
         )
-        ax_spec.set(title="Linear-frequency power spectrogram")
+        ax_spec_2.set(title="Linear-frequency power spectrogram")
         st.pyplot(fig_spec_2)
         shutil.rmtree(temp_dir)
